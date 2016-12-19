@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xhc.blog.dao.ManagerDao">
+	<resultMap type="Manager" id="ManagerMap">
+		<id property="id" column="id" />
+		<result property="Mname" column="Mname" />
+		<result property="Mpasswd" column="Mpasswd" />
+	</resultMap>
+	<select id="checkLogin" resultMap="ManagerMap">
+		select * from tab_manager where Mname=#{0} and Mpasswd=#{1}
+	</select>
+	<select id="selectOne" resultMap="ManagerMap">
+		select * from tab_manager where id=#{0}
+	</select>
+	<update id="updateUser" parameterType="com.xhc.blog.entity.Manager" statementType="PREPARED">
+		update tab_manager
+		<set>
+            <if test="Mname != null">Mname = #{Mname},</if>
+            <if test="Mpasswd != null">Mpasswd = #{Mpasswd},</if>
+        </set>
+ 
+	</update>
+</mapper>

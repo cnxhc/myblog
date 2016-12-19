@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xhc.blog.dao.ArtitleDao">
+	<resultMap type="Tab_artitle_commend" id="InsertComment">
+		<id property="id" column="tab_artitle_commend.id"/>
+		<result property="Cid" column="Cid"/>
+		<result property="Cname" column="Cname"/>
+		<result property="Ccontent" column="Ccontent"/>
+		<result property="Cdate" column="Cdate"/>
+		
+	</resultMap>
+
+	<insert id="addComment"  parameterType="Tab_artitle_commend" 
+        useGeneratedKeys="true" keyProperty="id">
+		insert into tab_artitle_commend(Cid,Cname,Ccontent,Cdate) values(#{Cid},#{Cname},#{Ccontent},#{Cdate})
+	</insert>
+</mapper>

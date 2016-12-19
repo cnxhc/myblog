@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xhc.blog.dao.PhotoDao">
+	<resultMap type="Tab_photo" id="ByPclass">
+		<id property="id" column="tab_photo.id"/>
+		<result property="Pclass" column="Pclass"/>
+		<result property="Pname" column="Pname"/>
+		<result property="Ppic" column="Ppic"/>
+		<result property="Pinfo" column="Pinfo"/>
+		<result property="Pdate" column="Pdate"/>
+	</resultMap>
+
+	
+	<select id="selectPhotoByPhoto_class" resultMap="ByPclass">
+		<!-- select * from tab_photo   where Pclass=#{0} GROUP BY Pclass=#{0} limit #{1},#{2} 这样写不行，分类分页实现不了，实现的是所有图片分页-->
+		select * from tab_photo   where Pclass=#{0}  limit #{1},#{2}
+	</select>
+	<select id="queryAllPhoto" resultMap="ByPclass">
+		select * from tab_photo limit #{0},#{1}
+	</select>
+	<select id="queryOnePhoto" resultMap="ByPclass">
+		select * from tab_photo where id=#{id}
+	</select>
+	<update id="updatePhoto" parameterType="Tab_photo">
+		update tab_photo set Pname=#{Pname},Ppic=#{Ppic},Pinfo=#{Pinfo} ,Pdate=#{Pdate} where id=#{id}
+	</update>
+	<insert id="addPhoto" parameterType="Tab_photo">
+		insert tab_photo(Pclass,Pname,Ppic,Pinfo,Pdate) values(#{Pclass},#{Pname},#{Ppic},#{Pinfo},#{Pdate})
+	</insert>
+	<delete id="deletePhoto" parameterType="Tab_photo">
+		delete from tab_photo where id=#{id}
+	</delete>
+	<select id="getRowCount" resultType="int">
+		SELECT COUNT(id) FROM tab_photo 
+	</select>
+	<select id="getCountByPclass" resultType="int">
+		SELECT COUNT(Pclass) FROM tab_photo  WHERE Pclass=#{Pclass}
+	</select>
+</mapper>

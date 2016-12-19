@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+
+
+<!DOCTYPE mapper
+    PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+    "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.xhc.blog.dao.ArtitleDao">
+	<resultMap type="Tab_artitle" id="ArtitletMap">
+		<id property="id" column="tab_artitle.id" />
+		<result property="Aclass" column="Aclass" />
+		<result property="Atitle" column="Atitle" />
+		<result property="Acontent" column="Acontent" />
+		<result property="Adate" column="Adate" />
+	</resultMap>
+	<resultMap type="Tab_artitle" id="ArtitletAndCommded" extends="ArtitletMap">
+		<collection property="tab_artitle_commend"
+			ofType="com.xhc.blog.entity.TabArtitleCommend">
+			<id property="id" column="tab_artitle_commend.id" />
+			<result property="Cid" column="Cid" />
+			<result property="Cname" column="Cname" />
+			<result property="Ccontent" column="Ccontent" />
+			<result property="Cdate" column="Cdate" />
+		</collection>
+	</resultMap>
+	<select id="queryByContent" resultMap="ArtitletAndCommded">
+		select * from tab_artitle LEFT JOIN
+		tab_artitle_commend ON tab_artitle.id=tab_artitle_commend.Cid
+		WHERE tab_artitle.Acontent LIKE CONCAT('%',#{content},'%')
+		<!-- select * from tab_artitle where Acontent like CONCAT('%',#{content},'%') 
+			limit 0,10 -->
+		<!-- select * from tab_artitle inner join tab_artitle_commend where tab_artitle.Aclass=tab_artitle_commend.Cid 
+			and Acontent like CONCAT('%',#{content},'%') limit 0,10 -->
+	</select>
+	<select id="queryAllArtitle" resultMap="ArtitletMap">
+		select * from tab_artitle limit #{0},#{1}
+		<!-- select ta.*,tac.id as commend_id,tac.Cname as commend_Cname,tac.Ccontent 
+			as commend_Ccontent,tac.Cdate as commend_Cdate from tab_artitle ta left join 
+			tab_artitle_commend tac on ta.id=tac.Cid -->
+	</select>
+	<select id="queryOneArtitle" resultMap="ArtitletMap">
+		select * from tab_artitle
+		where id=#{id}
+	</select>
+	<select id="getArtitleRowCount" resultType="int">
+		select count(id) from
+		tab_artitle
+	</select>
+	<select id="getCountByLikeContent" resultType="int">
+		select
+		COUNT(tab_artitle.id) from tab_artitle ,
+		tab_artitle_commend
+		WHERE tab_artitle.id=tab_artitle_commend.Cid
+		AND tab_artitle.Acontent LIKE CONCAT('%',#{content},'%')
+	</select>
+	<update id="updateArtitle" parameterType="Tab_artitle">
+		update tab_artitle set
+		Aclass=#{Aclass},Atitle=#{Atitle},Acontent=#{Acontent},Adate=#{Adate}
+		where id=#{id}
+	</update>
+	<insert id="addArtitle" parameterType="Tab_artitle">
+		insert
+		tab_artitle(Aclass,Atitle,Acontent,Adate)
+		values(#{Aclass},#{Atitle},#{Acontent},#{Adate})
+	</insert>
+	<delete id="deleteArtitle" parameterType="int">
+		delete from tab_artitle
+		where id=#{id}
+	</delete>
+</mapper>
